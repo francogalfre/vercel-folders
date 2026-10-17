@@ -70,7 +70,10 @@ function renderNodes(grid: HTMLUListElement, searching: boolean, active: Folder 
     const folders = searching ? [] : store.folders;
     const previews = folders.map((f) => f.projects.map((p) => avatarOf(p) ?? ""));
     const signature = JSON.stringify([folders, active?.id, cardClass, previews]);
-    if (grid.dataset.vfSignature === signature) return;
+    // React may drop our nodes when it re-renders the list, so also check they're still there
+    const expected = active ? 1 : folders.length + (folders.length ? 1 : 0);
+    const present = grid.querySelectorAll(":scope > [data-vf-node]").length;
+    if (grid.dataset.vfSignature === signature && present === expected) return;
 
     grid.dataset.vfSignature = signature;
     grid.querySelectorAll(":scope > [data-vf-node]").forEach((node) => node.remove());
