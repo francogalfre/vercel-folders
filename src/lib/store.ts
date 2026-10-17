@@ -3,7 +3,7 @@ import type { Folder, FolderInput } from "@/types/folder";
 
 let team = "";
 let folders: Folder[] = [];
-let openId: string | null = null;
+let activeId: string | null = null;
 const listeners = new Set<() => void>();
 
 function emit() {
@@ -22,17 +22,18 @@ export const store = {
     get folders() {
         return folders;
     },
-    get openId() {
-        return openId;
+    get activeId() {
+        return activeId;
     },
 
     subscribe(fn: () => void) {
         listeners.add(fn);
+        return () => void listeners.delete(fn);
     },
 
     async load(nextTeam: string) {
         team = nextTeam;
-        openId = null;
+        activeId = null;
         folders = await loadFolders(team);
         emit();
     },
@@ -41,8 +42,14 @@ export const store = {
         return folders.find((f) => f.projects.includes(project));
     },
 
-    toggle(id: string) {
-        openId = openId === id ? null : id;
+    enter(id: string) {
+        activeId = id;
+        emit();
+    },
+
+    exit() {
+        if (activeId === null) return;
+        activeId = null;
         emit();
     },
 
@@ -58,7 +65,7 @@ export const store = {
 
     remove(id: string) {
         folders = folders.filter((f) => f.id !== id);
-        if (openId === id) openId = null;
+        if (activeId === id) activeId = null;
         return persist();
     },
 
@@ -73,5 +80,6 @@ export const store = {
 
 onFoldersChanged(() => team, (next) => {
     folders = next;
+    if (activeId && !folders.some((f) => f.id === activeId)) activeId = null;
     emit();
 });

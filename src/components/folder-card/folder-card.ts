@@ -1,9 +1,14 @@
 import "./folder-card.css";
+import { Avatar } from "@/components/folder-card/avatar";
 import { DRAG_TYPE, FOLDER_ICON, MORE_ICON } from "@/constants";
 import { openFolderDialog } from "@/components/folder-dialog/folder-dialog";
+import { dropProject } from "@/lib/drag";
 import { store } from "@/lib/store";
 import type { Folder } from "@/types/folder";
 import { h } from "@/utils/dom";
+
+const MAX_AVATARS = 4;
+let popped: string | null = null;
 
 function EditButton(folder: Folder) {
     const edit = h("button", {
@@ -18,6 +23,19 @@ function EditButton(folder: Folder) {
         openFolderDialog(folder);
     });
     return edit;
+}
+
+function Preview(folder: Folder, avatarOf: (project: string) => string | undefined) {
+    if (!folder.projects.length) return h("div", { className: "vf-folder__empty", textContent: "Drop projects here" });
+
+    const stack = h(
+        "div",
+        { className: "vf-folder__stack" },
+        folder.projects.slice(0, MAX_AVATARS).map((project) => Avatar(project, avatarOf(project))),
+    );
+    const extra = folder.projects.length - MAX_AVATARS;
+    if (extra > 0) stack.append(h("span", { className: "vf-avatar vf-avatar--more", textContent: `+${extra}` }));
+    return stack;
 }
 
 function bindDrop(card: HTMLElement, folder: Folder) {
@@ -35,7 +53,8 @@ function bindDrop(card: HTMLElement, folder: Folder) {
         e.preventDefault();
         e.stopPropagation();
         card.classList.remove("vf-folder--over");
-        store.move(project, folder.id);
+        popped = folder.id;
+        dropProject(project, folder.id);
     });
 }
 
@@ -43,38 +62,38 @@ function bindDrop(card: HTMLElement, folder: Folder) {
  * A folder rendered as a grid item. `cardClass` is copied from a real project
  * card so the folder inherits Vercel's card styling.
  */
-export function FolderCard(folder: Folder, cardClass: string) {
+export function FolderCard(folder: Folder, cardClass: string, avatarOf: (project: string) => string | undefined) {
     const count = folder.projects.length;
 
-    const icon = h("span", { className: "vf-folder__icon", innerHTML: FOLDER_ICON });
-    icon.style.color = folder.color;
-
-    const card = h("li", { className: `${cardClass} vf-folder`, tabIndex: 0, role: "button" }, [
+    const body = h("div", { className: "vf-folder__body" }, [
         h("div", { className: "vf-folder__head" }, [
-            icon,
+            h("span", { className: "vf-folder__icon", innerHTML: FOLDER_ICON }),
             h("div", { className: "vf-folder__titles" }, [
                 h("span", { className: "vf-folder__name", textContent: folder.name }),
-                h("span", {
-                    className: "vf-folder__count",
-                    textContent: `${count} project${count === 1 ? "" : "s"}`,
-                }),
+                h("span", { className: "vf-folder__count", textContent: `${count} project${count === 1 ? "" : "s"}` }),
             ]),
             EditButton(folder),
         ]),
     ]);
-    if (folder.description) {
-        card.append(h("p", { className: "vf-folder__desc", textContent: folder.description }));
-    }
+    if (folder.description) body.append(h("p", { className: "vf-folder__desc", textContent: folder.description }));
+    body.append(Preview(folder, avatarOf));
 
+    const card = h("li", { className: `${cardClass} vf-folder`, tabIndex: 0, role: "button" }, [body]);
+    card.dataset.vfNode = "folder";
     card.dataset.vfFolder = folder.id;
     card.style.setProperty("--vf-color", folder.color);
-    card.setAttribute("aria-expanded", String(store.openId === folder.id));
+    card.ariaLabel = `Open folder ${folder.name}`;
 
-    card.addEventListener("click", () => store.toggle(folder.id));
+    if (popped === folder.id) {
+        popped = null;
+        card.classList.add("vf-folder--pop");
+    }
+
+    card.addEventListener("click", () => store.enter(folder.id));
     card.addEventListener("keydown", (e) => {
         if (e.target === card && (e.key === "Enter" || e.key === " ")) {
             e.preventDefault();
-            store.toggle(folder.id);
+            store.enter(folder.id);
         }
     });
     bindDrop(card, folder);

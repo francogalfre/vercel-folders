@@ -1,49 +1,104 @@
 import "@/styles/grid.css";
 import { FolderCard } from "@/components/folder-card/folder-card";
+import { FolderHeader } from "@/components/folder-header/folder-header";
 import { NewFolderButton } from "@/components/new-folder-button/new-folder-button";
 import { store } from "@/lib/store";
-import { getGridHeader, getProjectCards, getProjectName, isSearching } from "@/lib/vercel";
+import { getGridHeader, getProjectAvatar, getProjectCards, getProjectName, isSearching } from "@/lib/vercel";
+import type { Folder } from "@/types/folder";
+import { h } from "@/utils/dom";
 
 const STEP = 1000;
+const STAGGER_MS = 40;
+
+// Last known avatar per project, so hidden or not-yet-loaded cards still show a preview
+const avatars = new Map<string, string>();
+const avatarKey = (project: string) => `${store.team}/${project}`;
+const avatarOf = (project: string) => avatars.get(avatarKey(project));
+
+function Divider() {
+    const divider = h("li", { className: "vf-divider", textContent: "Projects", ariaHidden: "true" });
+    divider.dataset.vfNode = "divider";
+    return divider;
+}
 
 export function renderGrid(grid: HTMLUListElement) {
     const searching = isSearching();
     const cards = getProjectCards(grid);
-
-    renderFolders(grid, searching ? [] : store.folders, cards[0]?.className ?? "");
-
-    store.folders.forEach((folder, index) => {
-        const card = grid.querySelector<HTMLElement>(`:scope > [data-vf-folder="${folder.id}"]`);
-        if (card) card.style.order = String(index * STEP);
-    });
+    const active = searching ? undefined : store.folders.find((f) => f.id === store.activeId);
 
     for (const card of cards) {
         const project = getProjectName(card, store.team);
-        if (!project) continue;
-
-        card.draggable = true;
-        card.dataset.vfProject = project;
-
-        const folder = store.folderOf(project);
-        const open = !!folder && folder.id === store.openId;
-        const index = folder ? store.folders.indexOf(folder) : store.folders.length;
-
-        card.classList.toggle("vf-hidden", !searching && !!folder && !open);
-        card.classList.toggle("vf-child", !searching && open);
-        card.style.order = searching ? "" : String(index * STEP + (folder ? 1 + folder.projects.indexOf(project) : 0));
-        if (folder) card.style.setProperty("--vf-color", folder.color);
+        const src = project && getProjectAvatar(card);
+        if (src) avatars.set(avatarKey(project), src);
     }
+
+    renderNodes(grid, searching, active, cards[0]?.className ?? "");
+    cards.forEach((card) => placeCard(card, searching, active));
 
     const header = getGridHeader(grid);
     if (header && !header.querySelector(".vf-new-folder")) header.append(NewFolderButton());
 }
 
-/** Rebuilds folder cards only when their content changed, to avoid flicker on unrelated DOM updates */
-function renderFolders(grid: HTMLUListElement, folders: typeof store.folders, cardClass: string) {
-    const signature = JSON.stringify([folders, store.openId, cardClass]);
+function placeCard(card: HTMLElement, searching: boolean, active: Folder | undefined) {
+    const project = getProjectName(card, store.team);
+    if (!project) return;
+
+    card.draggable = true;
+    card.dataset.vfProject = project;
+    card.classList.remove("vf-dropped");
+
+    const folder = store.folderOf(project);
+    const inActive = !!active && folder?.id === active.id;
+    const hidden = !searching && (active ? !inActive : !!folder);
+    const index = folder ? store.folders.indexOf(folder) : store.folders.length;
+
+    card.classList.toggle("vf-hidden", hidden);
+    card.classList.toggle("vf-enter", inActive);
+    card.style.order = searching ? "" : inActive ? String(1 + active!.projects.indexOf(project)) : String(index * STEP);
+
+    if (inActive) card.style.setProperty("--vf-delay", `${active!.projects.indexOf(project) * STAGGER_MS}ms`);
+    else card.style.removeProperty("--vf-delay");
+}
+
+/** Rebuilds our own nodes only when their content changed, to avoid flicker on unrelated DOM updates */
+function renderNodes(grid: HTMLUListElement, searching: boolean, active: Folder | undefined, cardClass: string) {
+    const folders = searching ? [] : store.folders;
+    const previews = folders.map((f) => f.projects.map((p) => avatarOf(p) ?? ""));
+    const signature = JSON.stringify([folders, active?.id, cardClass, previews]);
     if (grid.dataset.vfSignature === signature) return;
 
     grid.dataset.vfSignature = signature;
-    grid.querySelectorAll(":scope > [data-vf-folder]").forEach((node) => node.remove());
-    grid.prepend(...folders.map((folder) => FolderCard(folder, cardClass)));
+    grid.querySelectorAll(":scope > [data-vf-node]").forEach((node) => node.remove());
+
+    if (active) {
+        const header = FolderHeader(active);
+        header.style.order = "0";
+        return grid.prepend(header);
+    }
+
+    const nodes: HTMLElement[] = folders.map((folder, index) => {
+        const card = FolderCard(folder, cardClass, avatarOf);
+        card.style.order = String(index * STEP);
+        return card;
+    });
+    if (folders.length) {
+        const divider = Divider();
+        divider.style.order = String(folders.length * STEP - 1);
+        nodes.push(divider);
+    }
+    grid.prepend(...nodes);
+}
+
+/** Removes everything the extension added to the page and restores Vercel's cards */
+export function resetGrid() {
+    document.querySelectorAll("[data-vf-node], .vf-new-folder").forEach((node) => node.remove());
+    document.querySelectorAll<HTMLElement>("[data-vf-signature]").forEach((grid) => delete grid.dataset.vfSignature);
+
+    document.querySelectorAll<HTMLElement>("[data-vf-project]").forEach((card) => {
+        card.classList.remove("vf-hidden", "vf-enter", "vf-dragging", "vf-dropped");
+        card.style.removeProperty("order");
+        card.style.removeProperty("--vf-delay");
+        card.removeAttribute("draggable");
+        delete card.dataset.vfProject;
+    });
 }

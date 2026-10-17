@@ -1,0 +1,106 @@
+.vf-header {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--vf-color) 6%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--vf-color) 28%, transparent);
+    list-style: none;
+}
+
+.vf-header__row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.vf-header__btn {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--ds-gray-900);
+    cursor: pointer;
+    transition:
+        background-color 150ms ease,
+        color 150ms ease;
+}
+
+.vf-header__btn:hover {
+    background: var(--ds-gray-alpha-200);
+    color: var(--ds-gray-1000);
+}
+
+.vf-header__btn:focus-visible,
+.vf-header__crumb:focus-visible {
+    outline: none;
+    box-shadow: var(--ds-focus-ring);
+}
+
+.vf-header__crumbs {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    font-size: 14px;
+}
+
+.vf-header__crumb {
+    padding: 2px 4px;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    font: inherit;
+    color: var(--ds-gray-900);
+    cursor: pointer;
+    transition: color 150ms ease;
+}
+
+.vf-header__crumb:hover {
+    color: var(--ds-gray-1000);
+}
+
+.vf-header__sep {
+    color: var(--ds-gray-700);
+}
+
+.vf-header__icon {
+    display: flex;
+    color: var(--vf-color);
+}
+
+.vf-header__icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.vf-header__name {
+    overflow: hidden;
+    font-weight: 500;
+    color: var(--ds-gray-1000);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vf-header__count {
+    flex: none;
+    font-size: 13px;
+    color: var(--ds-gray-900);
+}
+
+.vf-header__desc {
+    margin: 0;
+    padding-left: 44px;
+    font-size: 13px;
+    color: var(--ds-gray-900);
+}

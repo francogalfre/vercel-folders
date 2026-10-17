@@ -6,7 +6,10 @@ Chrome extension (MV3) that adds folders to the Vercel dashboard project grid.
 
 - Create folders with a name, optional description and colored icon
 - Drag projects into folders
-- Click a folder to expand it
+- Folder cards preview the avatars of the projects inside
+- Click a folder to open it; Esc or the back button returns
+- "Add to Folder" in each project's menu
+- Turn it on/off from the toolbar popup
 - Folders saved per team in `chrome.storage.sync`
 
 ## Structure
@@ -41,7 +44,7 @@ Open `chrome://extensions`, enable Developer mode, click **Load unpacked** and s
 ## How it works
 
 - Folders are rendered as grid items reusing Vercel's card classes.
-- Projects are placed after their folder with CSS `order`, so React-owned nodes are never moved.
+- Projects are shown/hidden and ordered with classes and CSS `order`, so React-owned nodes are never moved.
 - A MutationObserver re-syncs the grid on SPA navigation, search and pagination.
 - Data is stored per team.
 
