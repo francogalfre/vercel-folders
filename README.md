@@ -14,12 +14,16 @@ Chrome extension (MV3) that adds folders to the Vercel dashboard project grid.
 ```
 src/
 ├── content/index.ts   # content script entry
+├── background/index.ts # service worker (toolbar badge)
+├── popup/             # toolbar popup (on/off switch)
 ├── components/        # folder-card, folder-dialog, new-folder-button (.ts + .css)
-├── lib/               # store, storage, vercel, grid, drag
+├── lib/               # store, storage, settings, vercel, grid, drag
 ├── utils/dom.ts
 ├── types/             # folder.ts, env.d.ts
 ├── constants/
 └── styles/grid.css
+public/icons/          # extension icons (generated)
+scripts/               # build.ts, generate-icons.py
 ```
 
 ## Development
@@ -27,6 +31,7 @@ src/
 ```bash
 bun install
 bun run dev        # watch build to dist/
+bun run icons      # regenerate public/icons (Python + Pillow)
 bun run build      # production build
 bun run typecheck
 ```

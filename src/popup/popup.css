@@ -1,0 +1,104 @@
+:root {
+    --bg: #0a0a0a;
+    --fg: #ededed;
+    --muted: #a1a1a1;
+    --border: rgba(255, 255, 255, 0.14);
+    --off: #333;
+    --on: #ededed;
+    --knob: #0a0a0a;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --bg: #fff;
+        --fg: #171717;
+        --muted: #666;
+        --border: rgba(0, 0, 0, 0.12);
+        --off: #d4d4d4;
+        --on: #171717;
+        --knob: #fff;
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    width: 280px;
+    margin: 0;
+    padding: 16px;
+    background: var(--bg);
+    color: var(--fg);
+    font: 14px/1.4 Geist, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+img {
+    border-radius: 4px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.hint {
+    margin: 8px 2px 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.switch {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: var(--off);
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.switch::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--fg);
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.switch[aria-checked="true"] {
+    background: var(--on);
+}
+
+.switch[aria-checked="true"]::after {
+    background: var(--knob);
+    transform: translateX(16px);
+}
+
+.switch:focus-visible {
+    outline: 2px solid var(--muted);
+    outline-offset: 2px;
+}
