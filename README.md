@@ -1,53 +1,35 @@
-# Vercel Folders
+<img src="assets/folders.png" width="100%" alt="Vercel Folders" />
 
-Chrome extension (MV3) that adds folders to the Vercel dashboard project grid.
+<h1 align="center">Vercel Folders</h1>
+<p align="center">Organize your Vercel projects into folders.</p>
 
-## Features
+<p align="center">
+  TypeScript · Bun · Chrome Extension (MV3)
+</p>
 
-- Create folders with a name, optional description and colored icon
-- Drag projects into folders
-- Folder cards preview the avatars of the projects inside
-- Click a folder to open it; Esc or the back button returns
-- "Add to Folder" in each project's menu
-- Turn it on/off from the toolbar popup
-- Folders saved per team in `chrome.storage.sync`
+<br />
 
-## Structure
+A Chrome extension for the Vercel dashboard. Group related projects into
+folders, drag them in, or use **Add to Folder** from the project menu.
+Folders sync across your devices and can be turned off from the toolbar.
 
-```
-src/
-├── content/index.ts   # content script entry
-├── background/index.ts # service worker (toolbar badge)
-├── popup/             # toolbar popup (on/off switch)
-├── components/        # folder-card, folder-dialog, new-folder-button (.ts + .css)
-├── lib/               # store, storage, settings, vercel, grid, drag
-├── utils/dom.ts
-├── types/             # folder.ts, env.d.ts
-├── constants/
-└── styles/grid.css
-public/icons/          # extension icons (generated)
-scripts/               # build.ts, generate-icons.py
-```
+<br />
 
-## Development
+<img src="assets/dialog.png" width="100%" alt="New folder dialog" />
+
+<br />
+
+## Quick start
 
 ```bash
 bun install
-bun run dev        # watch build to dist/
-bun run icons      # regenerate public/icons (Python + Pillow)
-bun run build      # production build
-bun run typecheck
+bun run build
 ```
 
-Open `chrome://extensions`, enable Developer mode, click **Load unpacked** and select the `dist/` folder.
+Open `chrome://extensions`, enable **Developer mode**, click **Load unpacked** and select `dist/`.
 
-## How it works
+Run `bun run dev` to rebuild on every change.
 
-- Folders are rendered as grid items reusing Vercel's card classes.
-- Projects are shown/hidden and ordered with classes and CSS `order`, so React-owned nodes are never moved.
-- A MutationObserver re-syncs the grid on SPA navigation, search and pagination.
-- Data is stored per team.
+<br />
 
-## License
-
-MIT
+<p align="center">Not affiliated with Vercel. MIT License.</p>
