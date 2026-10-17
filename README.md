@@ -1,35 +1,22 @@
-<img src="assets/folders.png" width="100%" alt="Vercel Folders" />
+# Vercel Folders
 
-<h1 align="center">Vercel Folders</h1>
-<p align="center">Organize your Vercel projects into folders.</p>
+Organize your [Vercel](https://vercel.com) projects into folders. 🗂️
 
-<p align="center">
-  TypeScript · Bun · Chrome Extension (MV3)
-</p>
+![Folders](public/folders.png)
 
-<br />
+When you have a lot of projects, the dashboard gets crowded fast. This Chrome extension lets you group them into folders: create one, pick a color, and drag projects in or use **Add to Folder** from the project menu. Folders sync across your devices and you can turn the extension off from the toolbar.
 
-A Chrome extension for the Vercel dashboard. Group related projects into
-folders, drag them in, or use **Add to Folder** from the project menu.
-Folders sync across your devices and can be turned off from the toolbar.
+![New folder](public/dialog.png)
 
-<br />
+This isn't a product or something to copy. I just wanted to propose an idea I liked to the Vercel team, and it's been useful for me in the meantime. ✨ Not affiliated with Vercel.
 
-<img src="assets/dialog.png" width="100%" alt="New folder dialog" />
-
-<br />
-
-## Quick start
+## Development
 
 ```bash
 bun install
 bun run build
 ```
 
-Open `chrome://extensions`, enable **Developer mode**, click **Load unpacked** and select `dist/`.
+Open `chrome://extensions`, enable Developer mode, click **Load unpacked** and select `dist/`.
 
-Run `bun run dev` to rebuild on every change.
-
-<br />
-
-<p align="center">Not affiliated with Vercel. MIT License.</p>
+Built with TypeScript + Bun.

@@ -24,7 +24,7 @@ async function build(): Promise<void> {
         }
     }
     await cp("manifest.json", "dist/manifest.json");
-    await cp("public", "dist", { recursive: true });
+    await cp("public/icons", "dist/icons", { recursive: true });
     await cp("src/popup/popup.html", "dist/popup.html");
 }
 
