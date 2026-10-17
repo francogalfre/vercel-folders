@@ -57,7 +57,7 @@ export function openFolderDialog(folder?: Folder) {
 
     const name = h("input", {
         className: "vf-input",
-        placeholder: "e.g. Echo",
+        placeholder: "e.g. Marketing sites",
         value: folder?.name ?? "",
         required: true,
         autocomplete: "off",

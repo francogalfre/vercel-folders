@@ -32,11 +32,16 @@ export function renderGrid(grid: HTMLUListElement) {
         if (src) avatars.set(avatarKey(project), src);
     }
 
-    renderNodes(grid, searching, active, cards[0]?.className ?? "");
+    renderNodes(grid, searching, active, vercelClasses(cards[0]));
     cards.forEach((card) => placeCard(card, searching, active));
 
     const header = getGridHeader(grid);
     if (header && !header.querySelector(".vf-new-folder")) header.append(NewFolderButton());
+}
+
+/** Vercel's own card classes, without ours (e.g. vf-hidden on a project that's inside a folder) */
+function vercelClasses(card: HTMLElement | undefined) {
+    return [...(card?.classList ?? [])].filter((c) => !c.startsWith("vf-")).join(" ");
 }
 
 function placeCard(card: HTMLElement, searching: boolean, active: Folder | undefined) {
