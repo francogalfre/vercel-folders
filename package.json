@@ -4,12 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun build src/content.ts --outdir dist --watch",
-    "build": "bun build src/content.ts --outdir dist && cp src/content.css dist/content.css",
-    "zip": "bun run build && zip -r vercel-folders.zip manifest.json dist icons"
+    "dev": "mkdir -p dist && cp manifest.json dist/ && bun build src/content/index.ts --outdir dist --entry-naming 'content.[ext]' --format iife --watch",
+    "build": "rm -rf dist && bun build src/content/index.ts --outdir dist --entry-naming 'content.[ext]' --format iife --minify && cp manifest.json dist/",
+    "typecheck": "tsc",
+    "zip": "bun run build && rm -f vercel-folders.zip && cd dist && zip -r ../vercel-folders.zip ."
   },
   "devDependencies": {
-    "@types/chrome": "latest",
-    "typescript": "latest"
+    "@types/chrome": "0.3.5",
+    "typescript": "7.0.2"
   }
 }

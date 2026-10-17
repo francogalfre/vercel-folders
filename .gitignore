@@ -149,3 +149,6 @@ vite.config.ts.timestamp-*
 .turbo
 dist
 vercel-folders.zip
+
+# Playwright MCP
+.playwright-mcp

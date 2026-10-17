@@ -5,7 +5,16 @@
     "moduleResolution": "bundler",
     "strict": true,
     "noEmit": true,
-    "types": ["chrome"]
+    "types": [
+      "chrome"
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }

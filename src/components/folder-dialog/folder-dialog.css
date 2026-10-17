@@ -1,0 +1,216 @@
+/* Mirrors Geist's modal: tokens, spacing and motion come from Vercel's own CSS variables */
+
+.vf-dialog {
+    width: 480px;
+    max-width: calc(100vw - 32px);
+    margin: auto; /* Vercel's reset sets dialog margin to 0 */
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--ds-background-100);
+    color: var(--ds-gray-1000);
+    font-family: inherit;
+    box-shadow: var(--ds-shadow-modal);
+    transition:
+        opacity var(--ds-motion-overlay-duration, 0.3s) var(--ds-motion-overlay-timing, ease),
+        transform var(--ds-motion-overlay-duration, 0.3s) var(--ds-motion-overlay-timing, ease);
+}
+
+.vf-dialog::backdrop {
+    background: rgb(0 0 0 / 0.6);
+    transition: opacity 0.2s ease;
+}
+
+@starting-style {
+    .vf-dialog[open] {
+        opacity: 0;
+        transform: scale(var(--ds-motion-overlay-scale, 0.96));
+    }
+
+    .vf-dialog[open]::backdrop {
+        opacity: 0;
+    }
+}
+
+.vf-dialog__body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 24px;
+}
+
+.vf-dialog__header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 4px;
+}
+
+.vf-dialog__preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: var(--ds-gray-alpha-100);
+    box-shadow: var(--ds-shadow-border-base);
+    transition: color 0.15s ease;
+}
+
+.vf-dialog__title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 26px;
+    letter-spacing: -0.4px;
+}
+
+.vf-dialog__subtitle {
+    margin: 2px 0 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--ds-gray-900);
+}
+
+.vf-dialog__footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 24px;
+    background: var(--ds-background-200);
+    border-top: 1px solid var(--ds-gray-alpha-400);
+}
+
+.vf-dialog__spacer {
+    flex: 1;
+}
+
+.vf-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.vf-field__label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    line-height: 16px;
+    color: var(--ds-gray-900);
+}
+
+.vf-field__hint {
+    color: var(--ds-gray-700);
+}
+
+.vf-input {
+    height: 40px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 6px;
+    outline: none;
+    background: var(--ds-background-100);
+    color: var(--ds-gray-1000);
+    font: inherit;
+    font-size: 14px;
+    box-shadow: 0 0 0 1px var(--ds-gray-alpha-400);
+    transition: box-shadow 0.15s ease;
+}
+
+.vf-input::placeholder {
+    color: var(--ds-gray-700);
+}
+
+.vf-input:hover {
+    box-shadow: 0 0 0 1px var(--ds-gray-alpha-500);
+}
+
+.vf-input:focus {
+    box-shadow:
+        0 0 0 1px var(--ds-gray-alpha-600),
+        0 0 0 4px var(--ds-gray-alpha-300);
+}
+
+.vf-swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.vf-swatch {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--vf-swatch);
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.vf-swatch:hover {
+    transform: scale(1.1);
+}
+
+.vf-swatch[aria-checked="true"] {
+    box-shadow:
+        0 0 0 2px var(--ds-background-100),
+        0 0 0 4px var(--vf-swatch);
+}
+
+.vf-swatch:focus-visible {
+    outline: none;
+    box-shadow: var(--ds-focus-ring);
+}
+
+.vf-btn {
+    height: 32px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 6px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+        background 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.vf-btn:focus-visible {
+    outline: none;
+    box-shadow: var(--ds-focus-ring);
+}
+
+.vf-btn--primary {
+    background: var(--ds-gray-1000);
+    color: var(--ds-background-100);
+}
+
+.vf-btn--primary:hover {
+    background: color-mix(in srgb, var(--ds-gray-1000) 85%, transparent);
+}
+
+.vf-btn--secondary {
+    background: var(--ds-background-100);
+    color: var(--ds-gray-1000);
+    box-shadow: 0 0 0 1px var(--ds-gray-alpha-400);
+}
+
+.vf-btn--secondary:hover {
+    background: var(--ds-gray-alpha-100);
+}
+
+.vf-btn--danger {
+    background: transparent;
+    color: var(--ds-red-900);
+}
+
+.vf-btn--danger:hover {
+    background: var(--ds-red-100);
+}

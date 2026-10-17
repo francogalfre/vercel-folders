@@ -1,0 +1,80 @@
+.vf-folder {
+    cursor: pointer;
+    user-select: none;
+    transition: box-shadow 0.15s;
+}
+
+.vf-folder[aria-expanded="true"],
+.vf-folder--over {
+    box-shadow:
+        0 0 0 1px var(--vf-color),
+        0 0 0 4px color-mix(in srgb, var(--vf-color) 25%, transparent) !important;
+}
+
+.vf-folder:focus-visible {
+    outline: 2px solid var(--ds-focus-color, #0070f3);
+    outline-offset: 2px;
+}
+
+.vf-folder__head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.vf-folder__icon {
+    display: flex;
+    transition: transform 0.15s;
+}
+
+.vf-folder--over .vf-folder__icon {
+    transform: scale(1.1);
+}
+
+.vf-folder__titles {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.vf-folder__name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ds-gray-1000, #ededed);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vf-folder__count,
+.vf-folder__desc {
+    margin: 0;
+    font-size: 13px;
+    color: var(--ds-gray-900, #a1a1a1);
+}
+
+.vf-folder__edit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--ds-gray-900);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.vf-folder__edit:hover {
+    background: var(--ds-gray-alpha-100);
+    color: var(--ds-gray-1000);
+}
+
+.vf-folder__edit:focus-visible {
+    outline: none;
+    box-shadow: var(--ds-focus-ring);
+}

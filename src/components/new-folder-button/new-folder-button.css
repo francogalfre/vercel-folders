@@ -1,0 +1,27 @@
+/* Matches Vercel's small secondary button */
+.vf-new-folder {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 10px 0 8px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--ds-background-100);
+    color: var(--ds-gray-1000);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 0 0 1px var(--ds-gray-alpha-400);
+    transition: background 0.15s ease;
+}
+
+.vf-new-folder:hover {
+    background: var(--ds-gray-alpha-100);
+}
+
+.vf-new-folder:focus-visible {
+    outline: none;
+    box-shadow: var(--ds-focus-ring);
+}

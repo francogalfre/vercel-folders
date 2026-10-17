@@ -3,13 +3,21 @@
   "name": "Vercel Folders",
   "version": "0.1.0",
   "description": "Organize your Vercel projects into folders.",
-  "permissions": ["storage"],
-  "host_permissions": ["https://vercel.com/*"],
+  "permissions": [
+    "storage"
+  ],
   "content_scripts": [
     {
-      "matches": ["https://vercel.com/*"],
-      "js": ["dist/content.js"],
-      "css": ["dist/content.css"]
+      "matches": [
+        "https://vercel.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "run_at": "document_idle"
     }
   ]
 }

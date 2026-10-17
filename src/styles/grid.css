@@ -1,0 +1,11 @@
+.vf-hidden {
+    display: none !important;
+}
+
+.vf-child {
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--vf-color) 60%, transparent) !important;
+}
+
+.vf-dragging {
+    opacity: 0.5;
+}
