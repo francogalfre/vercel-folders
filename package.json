@@ -1,0 +1,15 @@
+{
+  "name": "vercel-folders",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun build src/content.ts --outdir dist --watch",
+    "build": "bun build src/content.ts --outdir dist && cp src/content.css dist/content.css",
+    "zip": "bun run build && zip -r vercel-folders.zip manifest.json dist icons"
+  },
+  "devDependencies": {
+    "@types/chrome": "latest",
+    "typescript": "latest"
+  }
+}
